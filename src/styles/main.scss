@@ -1,0 +1,28 @@
+@import "@/styles/components/fonts.scss";
+@import "@/styles/components/reset.scss";
+@import "@/styles/components/colors.scss";
+body {
+  color: $white;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "poppins";
+  background: $bg-dark;
+}
+#app {
+  display: flex;
+}
+.container {
+  margin: 0 auto;
+  width: 1092px;
+}
+.navigation {
+  position: fixed;
+}
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 40px 0 20px 0;
+}
+a {
+  color: $white;
+}
