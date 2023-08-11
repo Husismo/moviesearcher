@@ -26,3 +26,8 @@ body {
 a {
   color: $white;
 }
+.movie__items {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+}

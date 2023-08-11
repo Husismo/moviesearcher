@@ -2,12 +2,24 @@
   <div class="movie">
     <div class="movie__img">
       <favoriteBtn class="movie__favorite-btn" />
-      <img src="@/assets/image/barbie.jpg" alt="movie picture" />
+      <router-link
+        :to="{
+          name: 'movie',
+          params: {
+            id: movieList.id,
+          },
+        }"
+      >
+        <img
+          :src="'https://image.tmdb.org/t/p/original' + movieList.poster_path"
+          alt="movie picture"
+        />
+      </router-link>
     </div>
     <div class="movie__info">
-      <div class="movie__name">Tokyo Train</div>
+      <div class="movie__name">{{ movieList.title }}</div>
       <div class="movie__wrapper">
-        <div class="movie__release-date">2022</div>
+        <div class="movie__release-date">{{ getNormalDate }}</div>
       </div>
     </div>
   </div>
@@ -18,6 +30,15 @@ import favoriteBtn from "./favoriteBtn.vue";
 export default {
   components: {
     favoriteBtn,
+  },
+  props: {
+    movieList: {},
+  },
+  computed: {
+    getNormalDate() {
+      let date = this.movieList.release_date;
+      return date.split("-").reverse().join(".");
+    },
   },
 };
 </script>
@@ -39,6 +60,7 @@ export default {
     justify-content: center;
     img {
       width: 255px;
+      height: 100%;
     }
   }
   &__info {

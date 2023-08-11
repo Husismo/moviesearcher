@@ -1,5 +1,5 @@
 <template>
-  <button class="watch__button">{{ text }}</button>
+  <button class="primary__button">{{ text }}</button>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.watch__button {
+.primary__button {
   padding: 17px 24px;
   font-weight: 500;
   font-family: "poppins";

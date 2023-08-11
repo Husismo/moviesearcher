@@ -2,11 +2,22 @@
   <div class="container">
     <div class="upcoming-page__wrapper">
       <div class="upcoming-page__title title">Coming soon</div>
-      <div class="upcoming-page__items">
-        <movieItem />
-        <movieItem />
-        <movieItem />
-        <movieItem />
+      <div class="loader movie__items" v-show="isFetching">
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+        <itemLoader />
+      </div>
+      <div class="movie__items">
+        <movieItem
+          :movieList="item"
+          v-for="item in upcomingList"
+          :key="item.id"
+        />
       </div>
     </div>
   </div>
@@ -14,9 +25,41 @@
 
 <script>
 import movieItem from "@/components/movieItem.vue";
+import itemLoader from "@/components/itemLoader.vue";
 export default {
   components: {
     movieItem,
+    itemLoader,
+  },
+  methods: {
+    getUpcomingMovies() {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${process.env.VUE_APP_AUTH_TOKEN}`,
+        },
+      };
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}movie/upcoming?language=en-US&page=1`,
+        options
+      )
+        .then((response) => response.json())
+        .then(
+          (response) => (this.upcomingList = response.results),
+          (this.isFetching = !this.isFetching)
+        )
+        .catch((err) => console.error(err));
+    },
+  },
+  mounted() {
+    this.getUpcomingMovies();
+  },
+  data() {
+    return {
+      upcomingList: [],
+      isFetching: true,
+    };
   },
 };
 </script>
@@ -26,11 +69,5 @@ export default {
 }
 .upcoming-page__title {
   margin-bottom: 20px;
-}
-.upcoming-page__items {
-  display: flex;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 20px;
 }
 </style>

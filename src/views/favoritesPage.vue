@@ -2,11 +2,12 @@
   <div class="container">
     <div class="favorites-page__wrapper">
       <div class="title">Favorites</div>
-        <div class="favorites-page__items">
-          <movieItem />
-          <movieItem />
-          <movieItem />
-          <movieItem />
+        <div class="movie__items">
+          <movieItem 
+          :movieList="item"
+          v-for="item in favoriteList"
+          :key="item.id"
+          />
         </div>
       </div>
     </div>
@@ -18,15 +19,16 @@ export default {
   components: {
     movieItem,
   },
+  data(){
+    return{
+      favoriteList: []
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
 .favorites-page__wrapper {
   margin-top: 50px;
 }
-.favorites-page__items {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 20px;
-}
+
 </style>

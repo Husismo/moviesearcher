@@ -35,6 +35,13 @@
             :path="`/comingsoon`"
           />
         </li>
+        <li class="nav__link">
+          <navigationLink
+            :iconName="`icon-search`"
+            :text="`Search Movie`"
+            :path="`/search`"
+          />
+        </li>
       </ul>
     </nav>
   </div>
