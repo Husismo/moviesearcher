@@ -9,10 +9,18 @@
       <div class="container">
         <div class="header__wrapper">
           <div class="header__title">{{ popularMovie.title }}</div>
-          <div class="header__subtitle">{{ getNormalPopularMovieDate }}</div>
+          <div class="header__subtitle">{{ popularMovie.overview }}</div>
           <div class="header__buttons">
-            <primaryBtn :text="`Watch now`" class="header__watch-btn" />
-            <favoriteBtn class="header__like-btn">like</favoriteBtn>
+            <router-link
+              :to="{
+                name: 'movie',
+                params: {
+                  id: popularMovie.id,
+                },
+              }"
+            >
+              <primaryBtn :text="`About`" class="header__watch-btn" />
+            </router-link>
           </div>
         </div>
       </div>
@@ -62,6 +70,16 @@ export default {
     movieItem,
     itemLoader,
   },
+
+  data() {
+    return {
+      topRated: [],
+      upcoming: [],
+      popularMovie: {},
+      isFetching: true,
+    };
+  },
+
   methods: {
     getTopRatedMovies() {
       const options = {
@@ -84,6 +102,7 @@ export default {
         )
         .catch((err) => console.error(err));
     },
+
     getUpcomingMovies() {
       const options = {
         method: "GET",
@@ -100,6 +119,7 @@ export default {
         .then((response) => (this.upcoming = response.results))
         .catch((err) => console.error(err));
     },
+
     getPopularMovie() {
       const options = {
         method: "GET",
@@ -117,24 +137,18 @@ export default {
         .catch((err) => console.error(err));
     },
   },
-  mounted() {
-    this.getTopRatedMovies();
-    this.getUpcomingMovies();
-    this.getPopularMovie();
-  },
+
   computed: {
     getNormalPopularMovieDate() {
       let date = this.popularMovie.release_date;
       return date.split("-").reverse().join(".");
     },
   },
-  data() {
-    return {
-      topRated: [],
-      upcoming: [],
-      popularMovie: {},
-      isFetching: true,
-    };
+
+  mounted() {
+    this.getTopRatedMovies();
+    this.getUpcomingMovies();
+    this.getPopularMovie();
   },
 };
 </script>
@@ -153,8 +167,12 @@ export default {
   background-repeat: no-repeat;
 
   &__wrapper {
+    padding: 50px 50px 0px 50px;
     display: flex;
     flex-direction: column;
+    background-color: #19181757;
+    backdrop-filter: blur(3px);
+    border-radius: 20px 20px 0px 0px;
   }
   &__title {
     font-size: 48px;

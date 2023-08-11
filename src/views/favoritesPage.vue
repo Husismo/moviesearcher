@@ -19,9 +19,28 @@ export default {
   components: {
     movieItem,
   },
+  mounted(){
+    this.getFavoriteMovies()
+  },
   data(){
     return{
       favoriteList: []
+    }
+  },
+  methods:{
+    getFavoriteMovies(){
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${process.env.VUE_APP_AUTH_TOKEN}`
+        }
+      };
+
+      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite/movies?language=en-US&page=1&sort_by=created_at.asc`, options)
+        .then(response => response.json())
+        .then(response => this.favoriteList = response.results)
+        .catch(err => console.error(err));
     }
   }
 };

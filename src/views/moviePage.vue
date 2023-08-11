@@ -40,7 +40,16 @@
           <p class="runtime">{{ this.runTimeH }}h {{ this.runTimeM }}m</p>
         </div>
         <div class="movie-page__favorite-button">
-          <favoriteBtn />
+          <favoriteBtn
+            v-show="!checkAdded"
+            :iconName="`icon-heart`"
+            @click.native="addToFavorite"
+          />
+          <favoriteBtn
+            v-show="checkAdded"
+            :iconName="`icon-added-heart`"
+            @click.native="removeFromFavorite"
+          />
         </div>
       </div>
     </div>
@@ -61,6 +70,15 @@ import favoriteBtn from "@/components/favoriteBtn.vue";
 import primaryBtn from "@/components/primaryBtn.vue";
 import movieItem from "@/components/movieItem.vue";
 export default {
+  watch: {
+    "$route.params.id": {
+      immediate: true,
+      handler() {
+        this.getThisMovie();
+        this.getSimilarMovies();
+      },
+    },
+  },
   components: {
     icon,
     favoriteBtn,
@@ -71,12 +89,59 @@ export default {
     getId() {
       return this.$route.params.id;
     },
+    checkAdded() {
+      if (this.$store.getters.isFavoriteAdded(this.thisMovie)) {
+        return true;
+      }
+    },
   },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
+    addToFavorite() {
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: `Bearer ${process.env.VUE_APP_AUTH_TOKEN}`,
+        },
+        body: JSON.stringify({
+          media_type: "movie",
+          media_id: this.thisMovie.id,
+          favorite: true,
+        }),
+      };
+
+      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+        .then((response) => response.json())
+        .then((response) => this.$store.commit("addToFavorite", this.thisMovie))
+        .catch((err) => console.error(err));
+    },
+    removeFromFavorite() {
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: `Bearer ${process.env.VUE_APP_AUTH_TOKEN}`,
+        },
+        body: JSON.stringify({
+          media_type: "movie",
+          media_id: this.thisMovie.id,
+          favorite: false,
+        }),
+      };
+      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+        .then((response) => response.json())
+        .then((response) =>
+          this.$store.commit("removeFromFavorite", this.thisMovie)
+        )
+        .catch((err) => console.error(err));
+    },
     getThisMovie() {
+      window.scrollTo(0, 0);
       const options = {
         method: "GET",
         headers: {
@@ -89,7 +154,7 @@ export default {
         options
       )
         .then((response) => response.json())
-        .then((response) => console.log((this.thisMovie = response)))
+        .then((response) => (this.thisMovie = response))
         .then(() => {
           this.getNormalRuntime();
           this.getNormalDate();
@@ -101,19 +166,16 @@ export default {
         method: "GET",
         headers: {
           accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYTJhNGM3NzVlZWM2MTM5NGRmYjQ4ZTcxNDY1ZTU3MiIsInN1YiI6IjY0YzkxYWE5MWZhMWM4MDEwZjRkZTNjNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aGYlq5BV6DYUPJW9r9vWFlns0K1tfrv5IcdhGeV-xm8",
+          Authorization: `Bearer ${process.env.VUE_APP_AUTH_TOKEN}`,
         },
       };
 
       fetch(
-        `https://api.themoviedb.org/3/movie/${this.getId}/similar?language=en-US&page=1`,
+        `${process.env.VUE_APP_BASE_URL}movie/${this.getId}/similar?language=en-US&page=1`,
         options
       )
         .then((response) => response.json())
-        .then((response) =>
-          console.log((this.similarMovies = response.results))
-        )
+        .then((response) => (this.similarMovies = response.results))
         .catch((err) => console.error(err));
     },
     getNormalRuntime() {
@@ -136,10 +198,6 @@ export default {
       runTimeM: "",
       normalDate: "",
     };
-  },
-  mounted() {
-    this.getThisMovie();
-    this.getSimilarMovies();
   },
 };
 </script>

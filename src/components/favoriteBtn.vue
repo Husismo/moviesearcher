@@ -1,6 +1,6 @@
 <template>
   <button class="favorite__btn">
-    <icon :iconName="`icon-heart`" />
+    <icon :iconName="iconName" />
   </button>
 </template>
 
@@ -9,6 +9,11 @@ import icon from "./icon.vue";
 export default {
   components: {
     icon,
+  },
+  props: {
+    iconName: {
+      type: String,
+    },
   },
 };
 </script>
