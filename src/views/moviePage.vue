@@ -3,7 +3,10 @@
     <div class="go-back__btn">
       <primaryBtn :text="`< Return back`" @click.native="goBack" />
     </div>
-    <div class="movie-page__wrapper">
+    <div class="loader">
+      <moviePageLoader v-show="isFetching" />
+    </div>
+    <div class="movie-page__wrapper" v-show="!isFetching">
       <img
         :src="
           'https://image.tmdb.org/t/p/original' + this.thisMovie.poster_path
@@ -54,7 +57,13 @@
       </div>
     </div>
     <div class="title">Similar Movies</div>
-    <div class="movie__items">
+    <div class="loader movie__items" v-show="isFetching">
+      <itemLoader />
+      <itemLoader />
+      <itemLoader />
+      <itemLoader />
+    </div>
+    <div class="movie__items" v-show="!isFetching">
       <movieItem
         :movieList="item"
         v-for="item in similarMovies"
@@ -69,32 +78,29 @@ import icon from "@/components/icon.vue";
 import favoriteBtn from "@/components/favoriteBtn.vue";
 import primaryBtn from "@/components/primaryBtn.vue";
 import movieItem from "@/components/movieItem.vue";
+import moviePageLoader from "@/components/moviePageLoader.vue";
+import itemLoader from "@/components/itemLoader.vue";
 export default {
-  watch: {
-    "$route.params.id": {
-      immediate: true,
-      handler() {
-        this.getThisMovie();
-        this.getSimilarMovies();
-      },
-    },
-  },
   components: {
     icon,
     favoriteBtn,
     primaryBtn,
     movieItem,
+    moviePageLoader,
+    itemLoader,
   },
-  computed: {
-    getId() {
-      return this.$route.params.id;
-    },
-    checkAdded() {
-      if (this.$store.getters.isFavoriteAdded(this.thisMovie)) {
-        return true;
-      }
-    },
+
+  data() {
+    return {
+      isFetching: true,
+      thisMovie: {},
+      similarMovies: [],
+      runTimeH: "",
+      runTimeM: "",
+      normalDate: "",
+    };
   },
+
   methods: {
     goBack() {
       this.$router.go(-1);
@@ -114,7 +120,10 @@ export default {
         }),
       };
 
-      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}account/${process.env.VUE_APP_ACCOUNT_ID}/favorite`,
+        options
+      )
         .then((response) => response.json())
         .then((response) => this.$store.commit("addToFavorite", this.thisMovie))
         .catch((err) => console.error(err));
@@ -133,7 +142,10 @@ export default {
           favorite: false,
         }),
       };
-      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}account/${process.env.VUE_APP_ACCOUNT_ID}/favorite`,
+        options
+      )
         .then((response) => response.json())
         .then((response) =>
           this.$store.commit("removeFromFavorite", this.thisMovie)
@@ -141,6 +153,7 @@ export default {
         .catch((err) => console.error(err));
     },
     getThisMovie() {
+      this.isFetching = true;
       window.scrollTo(0, 0);
       const options = {
         method: "GET",
@@ -154,7 +167,9 @@ export default {
         options
       )
         .then((response) => response.json())
-        .then((response) => (this.thisMovie = response))
+        .then(
+          (response) => ((this.thisMovie = response), (this.isFetching = false))
+        )
         .then(() => {
           this.getNormalRuntime();
           this.getNormalDate();
@@ -190,14 +205,26 @@ export default {
       this.normalDate = date.split("-").reverse().join(".");
     },
   },
-  data() {
-    return {
-      thisMovie: {},
-      similarMovies: [],
-      runTimeH: "",
-      runTimeM: "",
-      normalDate: "",
-    };
+
+  computed: {
+    getId() {
+      return this.$route.params.id;
+    },
+    checkAdded() {
+      if (this.$store.getters.isFavoriteAdded(this.thisMovie)) {
+        return true;
+      }
+    },
+  },
+
+  watch: {
+    "$route.params.id": {
+      immediate: true,
+      handler() {
+        this.getThisMovie();
+        this.getSimilarMovies();
+      },
+    },
   },
 };
 </script>
@@ -222,6 +249,8 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     padding: 40px;
+    width: 100%;
+
     background: linear-gradient(
       90deg,
       $purple-active 0%,

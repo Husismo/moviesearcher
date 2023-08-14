@@ -1,10 +1,10 @@
 <template>
   <svg
     role="img"
-    width="255"
-    height="450"
+    width="1092"
+    height="390"
     aria-labelledby="loading-aria"
-    viewBox="0 0 255 450"
+    viewBox="0 0 1092 390"
     preserveAspectRatio="none"
   >
     <title id="loading-aria">Loading...</title>
@@ -18,8 +18,15 @@
     ></rect>
     <defs>
       <clipPath id="clip-path">
-        <rect x="0" y="0" rx="20" ry="20" width="255" height="386" />
-        <rect x="0" y="390" rx="15" ry="15" width="255" height="43" />
+        <rect x="0" y="-1" rx="20" ry="20" width="255" height="390" />
+        <rect x="295" y="95" rx="5" ry="5" width="350" height="12" />
+        <rect x="295" y="40" rx="5" ry="5" width="250" height="40" />
+        <rect x="295" y="115" rx="5" ry="5" width="345" height="12" />
+        <rect x="295" y="135" rx="5" ry="5" width="348" height="12" />
+        <rect x="295" y="155" rx="5" ry="5" width="340" height="12" />
+        <rect x="295" y="175" rx="5" ry="5" width="347" height="12" />
+        <rect x="295" y="195" rx="5" ry="5" width="300" height="12" />
+        <rect x="295" y="285" rx="14" ry="14" width="54" height="54" />
       </clipPath>
       <linearGradient id="fill">
         <stop offset="0.599964" stop-color="#191817" stop-opacity="1">

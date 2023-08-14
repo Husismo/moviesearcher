@@ -24,7 +24,7 @@ export default {
       };
 
       fetch(
-        `${process.env.VUE_APP_BASE_URL}account/20237202/favorite/movies?language=en-US&page=1&sort_by=created_at.asc`,
+        `${process.env.VUE_APP_BASE_URL}account/${process.env.VUE_APP_ACCOUNT_ID}/favorite/movies?language=en-US&page=1&sort_by=created_at.asc`,
         options
       )
         .then((response) => response.json())

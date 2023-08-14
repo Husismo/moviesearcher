@@ -34,9 +34,6 @@ export default {
   components: {
     favoriteBtn,
   },
-  data() {
-    return {};
-  },
 
   props: {
     movieList: {},
@@ -62,7 +59,10 @@ export default {
         }),
       };
 
-      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}account/${process.env.VUE_APP_ACCOUNT_ID}/favorite`,
+        options
+      )
         .then((response) => response.json())
         .then((response) => this.$store.commit("addToFavorite", this.movieList))
         .catch((err) => console.error(err));
@@ -82,7 +82,10 @@ export default {
           favorite: false,
         }),
       };
-      fetch(`${process.env.VUE_APP_BASE_URL}account/20237202/favorite`, options)
+      fetch(
+        `${process.env.VUE_APP_BASE_URL}account/${process.env.VUE_APP_ACCOUNT_ID}/favorite`,
+        options
+      )
         .then((response) => response.json())
         .then((response) =>
           this.$store.commit("removeFromFavorite", this.movieList)

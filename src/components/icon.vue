@@ -6,12 +6,12 @@
 
 <script>
 export default {
+  name: `icon`,
   props: {
     iconName: {
       type: String,
     },
   },
-  name: `icon`,
   data() {
     return {};
   },

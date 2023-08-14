@@ -31,6 +31,14 @@ export default {
     movieItem,
     itemLoader,
   },
+
+  data() {
+    return {
+      upcomingList: [],
+      isFetching: true,
+    };
+  },
+
   methods: {
     getUpcomingMovies() {
       const options = {
@@ -52,17 +60,13 @@ export default {
         .catch((err) => console.error(err));
     },
   },
+
   mounted() {
     this.getUpcomingMovies();
   },
-  data() {
-    return {
-      upcomingList: [],
-      isFetching: true,
-    };
-  },
 };
 </script>
+
 <style lang="scss" scoped>
 .upcoming-page__wrapper {
   margin-top: 50px;

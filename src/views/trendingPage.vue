@@ -39,6 +39,15 @@ export default {
     movieItem,
     itemLoader,
   },
+
+  data() {
+    return {
+      nowPlayingList: [],
+      popularList: [],
+      isFetching: true,
+    };
+  },
+
   methods: {
     getPopularMovies() {
       const options = {
@@ -76,19 +85,14 @@ export default {
         .catch((err) => console.error(err));
     },
   },
+
   mounted() {
     this.getPopularMovies();
     this.getNowPlayingMovies();
   },
-  data() {
-    return {
-      nowPlayingList: [],
-      popularList: [],
-      isFetching: true,
-    };
-  },
 };
 </script>
+
 <style lang="scss" scoped>
 .trending-page__wrapper {
   margin-top: 50px;
